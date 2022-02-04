@@ -90,7 +90,7 @@ func (s *MedianE2ESuite) TestMedianWithInvalidSources() {
 
 	out, _, err := callSetzer("price", "ethbtc")
 	s.Require().NoError(err)
-	s.Require().Equal("1.00000000", out)
+	s.Require().Equal("1.0000000000", out)
 }
 
 func (s *MedianE2ESuite) TestMedianWithMoreInvalidSourcesThanRequired() {
@@ -110,7 +110,7 @@ func (s *MedianE2ESuite) TestMedianWithMoreInvalidSourcesThanRequired() {
 	s.Require().NoError(err)
 
 	_, exitCode, err := callSetzer("price", "ethbtc")
-	s.Require().NoError(err)
+	s.Require().Error(err)
 	s.Require().Equal(1, exitCode)
 }
 

@@ -17,7 +17,7 @@ get-median () {
   done
 
   if [[ ${#prices[@]} -lt $SETZER_MIN_MEDIAN ]]; then
-    echo "Error: not enough sources to provide a median"
+    echo "Error: not enough sources to provide a median: ${#prices[@]} < $SETZER_MIN_MEDIAN"
     exit 1
   fi
 
