@@ -2,6 +2,7 @@ package e2e
 
 import (
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/chronicleprotocol/infestor"
@@ -84,6 +85,7 @@ func (s *PriceETHBTCE2ESuite) TestPrice3Correct3Invalid() {
 
 	s.Require().NoError(err)
 
+	os.Setenv("SETZER_MIN_MEDIAN", "3")
 	out, _, err := callSetzer("price", "ethbtc")
 	s.Require().NoError(err)
 	s.Require().Equal("1.0000000000", out)
