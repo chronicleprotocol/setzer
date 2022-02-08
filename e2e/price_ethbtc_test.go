@@ -85,10 +85,16 @@ func (s *PriceETHBTCE2ESuite) TestPrice3Correct3Invalid() {
 
 	s.Require().NoError(err)
 
+	// Success when at or above the minimum required
 	os.Setenv("SETZER_MIN_MEDIAN", "3")
 	out, _, err := callSetzer("price", "ethbtc")
 	s.Require().NoError(err)
 	s.Require().Equal("1.0000000000", out)
+
+	// Failure when below
+	os.Setenv("SETZER_MIN_MEDIAN", "4")
+	_, _, err = callSetzer("price", "ethbtc")
+	s.Require().Error(err)
 }
 
 func (s *PriceETHBTCE2ESuite) TestPriceMedianCalculationNotEnoughMinSources() {
