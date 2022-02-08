@@ -61,3 +61,43 @@ Example:
 ```bash
 $ EXCHANGERATES_API_KEY=your_api_key setzer fx krwusd
 ```
+
+### E2E tests
+E2E tests for setzer are written in Go language and relies on [Smocker](https://smocker.dev) for API manipulation.
+
+#### How to setup tests environment
+You have to install Docker on your machine first.
+Then you will have to start [smocker](https://smocker.dev) container.
+
+```bash
+$ docker run -d \
+  --restart=always \
+  -p 8080:8080 \
+  -p 8081:8081 \
+  --name smocker \
+  thiht/smocker
+```
+
+Next step will be to build setzer E2E docker container:
+
+```bash
+$ docker build -t setzer -f e2e/Dockerfile .
+```
+
+Run newly created container:
+
+```bash
+$ docker run -i --rm --link smocker setzer
+```
+
+If you need to write tests or want to continuesly run them while doing something you might use docker interactive mode.
+
+```bash
+$ docker run -it --rm -v $(pwd):/app --link smocker setzer /bin/bash
+```
+
+It will start docker in interactove mode and you will be able to run E2E tests using command: 
+
+```bash
+$ go test -v -parallel 1 -cpu 1 ./...
+```
