@@ -35,6 +35,8 @@ ENV ORIGIN_THEGRAPH_URL=$SMOCKER \
  ORIGIN_POLONIEX_URL=$SMOCKER \
  ORIGIN_UPBIT_URL=$SMOCKER
 
+ENV ETH_RPC_URL=$SMOCKER
+
 # Installing setzer
 COPY ./libexec/setzer/ /root/setzer
 
