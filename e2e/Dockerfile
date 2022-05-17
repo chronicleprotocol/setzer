@@ -35,7 +35,7 @@ ENV ORIGIN_THEGRAPH_URL=$SMOCKER \
  ORIGIN_POLONIEX_URL=$SMOCKER \
  ORIGIN_UPBIT_URL=$SMOCKER
 
-ENV ETH_RPC_URL=$SMOCKER
+ENV ETH_RPC_URL=http://127.0.0.1:8545
 
 # Installing setzer
 COPY ./libexec/setzer/ /root/setzer
@@ -48,4 +48,4 @@ COPY . /app
 WORKDIR /app/e2e
 RUN go mod download
 
-CMD ["go", "test", "-v", "-parallel", "1", "-cpu", "1", "./..."]
+CMD ["./scripts/test.sh"]
