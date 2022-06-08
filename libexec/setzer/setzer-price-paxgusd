@@ -3,19 +3,19 @@ set -e
 pair=paxgusd
 sources=(
   binance
-  bitthumb
+  ftx
   gemini
   kraken
   uniswap
 )
 
 case $1 in
-  binance|bitthumb) {
+  binance) {
     paxg_usdt=$(setzer x-price "$1" paxg:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l <<<"$paxg_usdt * $usdt_usd")"
   };;
-  gemini) {
+  gemini|ftx) {
     setzer x-price "$1" paxg:usd
   };;
   kraken) {
