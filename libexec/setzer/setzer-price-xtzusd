@@ -7,14 +7,14 @@ sources=(
   coinbase
   kraken
   hitbtc
-  okex
+  okx
 )
 
 case $1 in
   bitfinex|coinbase|hitbtc|kraken) {
     setzer x-price "$1" xtz:usd
   };;
-  binance|okex) {
+  binance|okx) {
     xtz_usdt=$(setzer x-price "$1" xtz:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l<<<"$xtz_usdt * $usdt_usd")"

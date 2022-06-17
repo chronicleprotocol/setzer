@@ -5,7 +5,7 @@ sources=(
   binance
   coinbase
   huobi
-  okex
+  okx
   sushiswap
   uniswap
 )
@@ -14,7 +14,7 @@ case $1 in
   coinbase) {
     setzer x-price "$1" snx:usd
   };;
-  huobi|okex) {
+  huobi|okx) {
     snx_usdt=$(setzer x-price "$1" snx:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l<<<"$snx_usdt * $usdt_usd")"
