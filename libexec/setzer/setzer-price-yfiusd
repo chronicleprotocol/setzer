@@ -2,27 +2,28 @@
 set -e
 pair=yfiusd
 sources=(
+  balancer_v2
   binance
   coinbase
   ftx
-  gemini
-  huobi
-  uniswap_v3
+  kraken
+  okx
+  sushiswap
 )
 
 case $1 in
-  binance|huobi) {
+  balancer_v2|sushiswap) {
+    yfi_weth=$(setzer x-price "$1" yfi:weth)
+    weth_usd=$(setzer price weth:usd)
+    setzer --format "$(bc -l <<<"$yfi_weth * $weth_usd")"
+  };;
+  binance|okx) {
     yfi_usdt=$(setzer x-price "$1" yfi:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l <<<"$yfi_usdt * $usdt_usd")"
   };;
-  coinbase|ftx|gemini) {
+  coinbase|ftx|kraken) {
     setzer x-price "$1" yfi:usd
-  };;
-  uniswap_v3) {
-    yfi_eth=$(setzer x-price "$1" yfi:eth)
-    eth_usd=$(setzer price ethusd)
-    setzer --format "$(bc -l <<<"$yfi_eth * $eth_usd")"
   };;
   *) {
     setzer --price-commands "-$1-" $pair "${sources[@]}"
