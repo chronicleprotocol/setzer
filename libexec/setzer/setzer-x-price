@@ -92,10 +92,12 @@ case $src in
     case "${pair^^}" in
       WSTETHETH) {
         # wstETH is a non-rebasing wrapper that exposes the underlying stETH shares
+        # converting stETH price to wstETH
         token_contract_addr=0000000000000000000000007f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0
       };;
       RETHETH) {
         # rETH is not rebasing, but its value increases over time respective to ETH
+        # converting ETH price to rETH
         token_contract_addr=000000000000000000000000ae78736cd615f374d3085123a210448e74fc6393
       };;
     esac
