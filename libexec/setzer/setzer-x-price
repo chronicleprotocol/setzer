@@ -87,33 +87,25 @@ case $src in
       "$getLatest_method_id" \
       "0000000000000000000000000000000000000000000000000000000000000000")  #PAIR_PRICE
 
+    # for Balancer Metastable pools, we must use the rate used by the internal Rate Provider
+    # and convert the response from getLatest
     case "${pair^^}" in
       WSTETHETH) {
         # wstETH is a non-rebasing wrapper that exposes the underlying stETH shares
-        wsteth_contract_addr=7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0
-        # keccak256("stEthPerToken()")
-        steth_per_token_method_id=035faf82
-        # how many stETH wei one would receive by unwarpping 10^18 wstETH wei
-        steth_per_wsteth=$(setzer --eth-call "$wsteth_contract_addr" "$steth_per_token_method_id")
-        # wstethEthPrice = stethPerWsteth * stethEthPrice
-        price=$(bc -l <<<"ibase=16; (${steth_per_wsteth^^} / ${ten_to_18^^} * ${tokenprice^} / ${ten_to_18^^})")
+        token_contract_addr=0000000000000000000000007f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0
       };;
       RETHETH) {
-        # getLatest is multiplied by the price rate obtained from the Rate Provider
-        # here, we divide by its latest cache value, getPriceRateCache
-        reth_contract_addr=000000000000000000000000ae78736cd615f374d3085123a210448e74fc6393
-        # keccak256("getPriceRateCache(address)")
-        getPriceRateCache_method_id=b867ee5a
-        # how many ETH wei one would receive by unwrapping 10^18 rETH wei if it was possible
-        res=$(setzer --eth-call "$pool_addr" "$getPriceRateCache_method_id" "$reth_contract_addr")
-        rEthRate=${res:0:64}
-        # rEthPrice = Eth_Per_rEth_inRocketPool * curve_tokenprice
-        price=$(bc -l <<<"ibase=16; (${rEthRate^^} * ${tokenprice^^} / ${ten_to_18^^} / ${ten_to_18^^})")
-      };;
-      *) {
-        price=$(bc -l <<<"ibase=16; ${tokenprice^^} / ${ten_to_18^^} ")
+        # rETH is not rebasing, but its value increases over time respective to ETH
+        token_contract_addr=000000000000000000000000ae78736cd615f374d3085123a210448e74fc6393
       };;
     esac
+    # keccak256("getPriceRateCache(address)")
+    getPriceRateCache_method_id=b867ee5a
+    res=$(setzer --eth-call "$pool_addr" "$getPriceRateCache_method_id" "$token_contract_addr")
+    Rate=${res:0:64}
+    # price = RateProviderRate * CurveTokenprice
+    price=$(bc -l <<<"ibase=16; (${Rate^^} * ${tokenprice^^} / ${ten_to_18^^} / ${ten_to_18^^})")
+
     if [[ -n $price ]]; then
       setzer --format $price
     fi
