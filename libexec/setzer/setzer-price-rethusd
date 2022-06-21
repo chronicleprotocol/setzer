@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -e
+pair=rethusd
+sources=(
+  balancer_v2
+  curve
+  rocketpool
+)
+
+case $1 in
+  balancer_v2|rocketpool) {
+    reth_eth=$(setzer twap "$1" reth:eth)
+    eth_usd=$(setzer price ethusd)
+    setzer --format "$(bc -l <<<"$reth_eth * $eth_usd")"
+  };;
+  curve) {
+    reth_wsteth=$(setzer twap "$1" reth:wsteth)
+    wsteth_usd=$(setzer price wstethusd)
+    setzer --format "$(bc -l <<<"$reth_wsteth * $wsteth_usd")"
+  };;
+  *) {
+    export SETZER_MIN_MEDIAN=2
+    setzer --price-commands "-$1-" $pair "${sources[@]}"
+  };;
+esac

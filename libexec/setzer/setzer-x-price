@@ -74,6 +74,9 @@ case $src in
       WSTETHETH) {
         pool_addr=32296969ef14eb0c6d29669c550d4a0449130230 # wstETH/wETH pool, but prices expressed in stETH/ETH
       };;
+      RETHETH) {
+        pool_addr=1e19cf2d73a72ef1332c882f20534b6519be0276 # rETH/wETH, but price returned by the pool includes the staking gains
+      };;
     esac
     # keccak256("getLatest(uint8)")
     getLatest_method_id=b10be739
@@ -94,6 +97,18 @@ case $src in
         steth_per_wsteth=$(setzer --eth-call "$wsteth_contract_addr" "$steth_per_token_method_id")
         # wstethEthPrice = stethPerWsteth * stethEthPrice
         price=$(bc -l <<<"ibase=16; (${steth_per_wsteth^^} / ${ten_to_18^^} * ${tokenprice^} / ${ten_to_18^^})")
+      };;
+      RETHETH) {
+        # getLatest is multiplied by the price rate obtained from the Rate Provider
+        # here, we divide by its latest cache value, getPriceRateCache
+        reth_contract_addr=000000000000000000000000ae78736cd615f374d3085123a210448e74fc6393
+        # keccak256("getPriceRateCache(address)")
+        getPriceRateCache_method_id=b867ee5a
+        # how many ETH wei one would receive by unwrapping 10^18 rETH wei if it was possible
+        res=$(setzer --eth-call "$pool_addr" "$getPriceRateCache_method_id" "$reth_contract_addr")
+        rEthRate=${res:0:64}
+        # rEthPrice = Eth_Per_rEth_inRocketPool * curve_tokenprice
+        price=$(bc -l <<<"ibase=16; (${rEthRate^^} * ${tokenprice^^} / ${ten_to_18^^} / ${ten_to_18^^})")
       };;
       *) {
         price=$(bc -l <<<"ibase=16; ${tokenprice^^} / ${ten_to_18^^} ")
@@ -146,6 +161,12 @@ case $src in
         crv_contract_addr=DC24316b9AE028F1497c275EB9192a3Ea0f67022 # stETH/ETH pool
         crv_src_token=$(printf '%064X' 1) # stETH index
         crv_dst_token=$(printf '%064X' 0) # ETH index
+        crv_src_amount=$ten_to_18
+      };;
+      RETHWSTETH) {
+        crv_contract_addr=447ddd4960d9fdbf6af9a790560d0af76795cb08 # stETH/ETH pool
+        crv_src_token=$(printf '%064X' 0) # rETH index
+        crv_dst_token=$(printf '%064X' 1) # wstETH index
         crv_src_amount=$ten_to_18
       };;
       *) {
@@ -226,6 +247,23 @@ case $src in
   poloniex) {
     json=$(curl_stat 200 -sS "${ORIGIN_POLONIEX_URL}/public?command=returnTicker")
     setzer --format "$(jshon <<<"$json" -e "${quote^^}"_"${base^^}" -e last -u)"
+  };;
+  rocketpool) {
+    ten_to_18=$(printf '%064X' 1000000000000000000) # 10^18 left-padded to 32 bytes
+    # RETHETH only
+    contract_addr="0xae78736Cd615f374D3085123A210448E74Fc6393"
+
+    # keccak256("getExchangeRate()")
+    get_rate_method_id=e6aa216c
+    rate=$(setzer \
+      --eth-call \
+      "$contract_addr" \
+      "$get_rate_method_id"
+    )
+    price=$(bc -l <<<"ibase=16; ${rate^^} / ${ten_to_18^^}")
+    if [[ -n $price ]]; then
+      setzer --format $price
+    fi
   };;
   sushiswap) {
     case "${pair^^}" in
