@@ -3,7 +3,6 @@ set -e
 pair=dgxusd
 sources=(
   bitfinex
-  kyber
 )
 
 case $1 in
@@ -11,11 +10,6 @@ case $1 in
     dgx_usdt=$(setzer x-price "$1" dgxusd)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l <<<"$dgx_usdt * $usdt_usd")"
-  };;
-  kyber) {
-    dgx_eth=$(setzer x-price "$1" dgx:eth)
-    eth_usd=$(setzer price ethusd)
-    setzer --format "$(bc -l <<<"$dgx_eth * $eth_usd")"
   };;
   *) {
     export SETZER_MIN_MEDIAN=2

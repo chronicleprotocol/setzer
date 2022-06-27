@@ -5,7 +5,6 @@ sources=(
   binance
   coinbase
   huobi
-  kyber
   upbit
 )
 
@@ -17,11 +16,6 @@ case $1 in
   };;
   coinbase) {
     setzer --format "$(setzer x-price "$1" knc:usd)"
-  };;
-  kyber) {
-    knc_eth=$(setzer x-price "$1" knc:eth)
-    eth_usd=$(setzer price ethusd)
-    setzer --format "$(bc -l <<<"$knc_eth * $eth_usd")"
   };;
   upbit) {
     knc_krw=$(setzer x-price "$1" knc:krw)

@@ -32,7 +32,6 @@ ORIGIN_HITBTC_URL="${ORIGIN_HITBTC_URL:-https://api.hitbtc.com}"
 ORIGIN_HUOBI_URL="${ORIGIN_HUOBI_URL:-https://api.huobi.pro}"
 ORIGIN_KRAKEN_URL="${ORIGIN_KRAKEN_URL:-https://api.kraken.com}"
 ORIGIN_KUCOIN_URL="${ORIGIN_KUCOIN_URL:-https://api.kucoin.com}"
-ORIGIN_KYBER_URL="${ORIGIN_KYBER_URL:-https://api.kyber.network}"
 ORIGIN_OKEX_URL="${ORIGIN_OKEX_URL:-https://www.okex.com}"
 ORIGIN_POLONIEX_URL="${ORIGIN_POLONIEX_URL:-https://poloniex.com}"
 ORIGIN_UPBIT_URL="${ORIGIN_UPBIT_URL:-https://api.upbit.com}"
@@ -214,10 +213,6 @@ case $src in
   kucoin) {
     json=$(curl_stat 200 -sS "${ORIGIN_KUCOIN_URL}/api/v1/market/orderbook/level1?symbol=${base^^}-${quote^^}")
     setzer --format "$(jshon <<<"$json" -e data -e price -u)"
-  };;
-  kyber) {
-    json=$(curl_stat 200 -sS "${ORIGIN_KYBER_URL}/change24h")
-    setzer --format "$(jshon <<<"$json" -e "${quote^^}_${base^^}" -e rate_eth_now -u)"
   };;
   okex) {
     json=$(curl_stat 200 -sS "${ORIGIN_OKEX_URL}/api/spot/v3/instruments/${base^^}-${quote^^}/ticker")

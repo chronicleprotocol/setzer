@@ -321,29 +321,6 @@ func (s *ValidExchangesE2ETest) TestKukoin() {
 	s.Require().Equal("3.0000000000", out)
 }
 
-func (s *ValidExchangesE2ETest) TestKyber() {
-	err := infestor.NewMocksBuilder().
-		Reset().
-		Add(origin.NewExchange("kyber").WithSymbol("DGX/ETH").WithPrice(1)).
-		Add(origin.NewExchange("kyber").WithSymbol("KNC/ETH").WithPrice(2)).
-		Add(origin.NewExchange("kyber").WithSymbol("MKR/ETH").WithPrice(3)).
-		Deploy(s.api)
-
-	s.Require().NoError(err)
-
-	out, _, err := callSetzer("x-price", "kyber", "dgx:eth")
-	s.Require().NoError(err)
-	s.Require().Equal("1.0000000000", out)
-
-	out, _, err = callSetzer("x-price", "kyber", "knc:eth")
-	s.Require().NoError(err)
-	s.Require().Equal("2.0000000000", out)
-
-	out, _, err = callSetzer("x-price", "kyber", "mkr:eth")
-	s.Require().NoError(err)
-	s.Require().Equal("3.0000000000", out)
-}
-
 func (s *ValidExchangesE2ETest) TestOkex() {
 	err := infestor.NewMocksBuilder().
 		Reset().
