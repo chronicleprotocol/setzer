@@ -251,10 +251,6 @@ case $src in
         id="0xa70d458a4d9bc0e6571565faee18a48da5c0d593"
         select="token1Price"
       };;
-      KNCETH) {
-        id="0xf49c43ae0faf37217bdcb00df478cf793edd6687"
-        select="token0Price"
-      };;
       LRCETH) {
         id="0x8878df9e1a7c87dcbf6d3999d997f262c05d8c70"
         select="token1Price"
