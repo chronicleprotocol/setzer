@@ -1,7 +1,7 @@
 FROM golang:1-alpine
 
 RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-  bash git datamash jq curl make jshon perl build-base ca-certificates bind-tools
+  bash git datamash jq curl make jshon perl build-base ca-certificates
 
 # TMP
 ENV SMOCKER_HOST="http://smocker"
