@@ -2,15 +2,16 @@
 set -e
 pair=btcusd
 sources=(
+  binance_us
   bitstamp
-  bittrex
   coinbase
+  ftx
   gemini
   kraken
 )
 
 case $1 in
-  bitstamp|bittrex|coinbase|gemini) {
+  binance_us|bitstamp|coinbase|ftx|gemini) {
     setzer x-price "$1" $pair
   };;
   kraken) {

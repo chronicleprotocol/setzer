@@ -4,14 +4,14 @@ pair=usdtusd
 sources=(
   binance
   bitfinex
+  coinbase
   ftx
-  huobi
   kraken
-  okex
+  okx
 )
 
 case $1 in
-  binance|okex) {
+  binance|okx) {
     btc_usdt=$(setzer x-price "$1" btc:usdt)
     btc_usd=$(setzer price btcusd)
     setzer --format "$(bc -l <<<"$btc_usd / $btc_usdt")"
@@ -19,10 +19,8 @@ case $1 in
   bitfinex) {
     setzer x-price "$1" ust:usd
   };;
-  ftx|huobi) {
-    eth_usdt=$(setzer x-price "$1" eth:usdt)
-    eth_usd=$(setzer price ethusd)
-    setzer --format "$(bc -l <<<"$eth_usd / $eth_usdt")"
+  coinbase|ftx) {
+    setzer x-price "$1" usdt:usd
   };;
   kraken) {
     setzer x-price kraken usdt:zusd

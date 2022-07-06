@@ -7,14 +7,14 @@ sources=(
   gemini
   huobi
   kraken
-  okex
+  okx
 )
 
 case $1 in
   kraken|gemini|coinbase) {
     setzer x-price "$1" fil:usd
   };;
-  huobi|binance|okex) {
+  huobi|binance|okx) {
     fil_usdt=$(setzer x-price "$1" fil:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l<<<"$fil_usdt * $usdt_usd")"

@@ -6,14 +6,14 @@ sources=(
   bitfinex
   gateio
   huobi
-  okex
+  okx
 )
 
 case $1 in
   bitfinex) {
     setzer x-price "$1" avax%3A:usd
   };;
-  gateio|okex) {
+  gateio|okx) {
     avax_usdt=$(setzer x-price "$1" avax:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l<<<"$avax_usdt * $usdt_usd")"

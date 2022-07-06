@@ -6,7 +6,7 @@ sources=(
   binance
   gemini
   huobi
-  okex
+  okx
   uniswap
 )
 
@@ -19,7 +19,7 @@ case $1 in
     btc_usd=$(setzer price btcusd)
     setzer --format "$(bc -l <<<"$aave_btc * $btc_usd")"
   };;
-  huobi|okex) {
+  huobi|okx) {
     aave_usdt=$(setzer x-price "$1" aave:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l<<<"$aave_usdt * $usdt_usd")"

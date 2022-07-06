@@ -5,12 +5,12 @@ sources=(
   binance
   bitfinex
   coinbase
-  okex
+  okx
   upbit
 )
 
 case $1 in
-  binance|okex) {
+  binance|okx) {
     zrx_btc=$(setzer x-price "$1" zrx:btc)
     btc_usd=$(setzer price btcusd)
     setzer --format "$(bc -l <<<"$zrx_btc * $btc_usd")"

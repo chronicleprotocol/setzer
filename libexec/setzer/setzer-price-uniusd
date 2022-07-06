@@ -6,7 +6,7 @@ sources=(
   coinbase
   ftx
   huobi
-  okex
+  okx
   uniswap_v3
 )
 
@@ -19,7 +19,7 @@ case $1 in
   coinbase|ftx) {
     setzer x-price "$1" uni:usd
   };;
-  huobi|okex) {
+  huobi|okx) {
     uni_usdt=$(setzer x-price "$1" uni:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l <<<"$uni_usdt * $usdt_usd")"

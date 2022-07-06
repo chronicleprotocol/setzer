@@ -3,24 +3,19 @@ set -e
 pair=mana:usd
 sources=(
   binance
-  bittrex
+  binance_us
   coinbase
-  huobi
+  ftx
+  okx
+  kraken
   upbit
 )
 
 case $1 in
-  binance|bittrex) {
-    mana_btc=$(setzer x-price "$1" mana:btc)
-    btc_usd=$(setzer price btcusd)
-    setzer --format "$(bc -l <<<"$mana_btc * $btc_usd")"
+  binance_us|coinbase|ftx|kraken) {
+    setzer x-price "$1" $pair
   };;
-  coinbase) {
-    mana_usdc=$(setzer x-price "$1" mana:usdc)
-    usdc_usd=$(setzer price usdcusd)
-    setzer --format "$(bc -l <<<"$mana_usdc * $usdc_usd")"
-  };;
-  huobi) {
+  binance|okx) {
     mana_usdt=$(setzer x-price "$1" mana:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l <<<"$mana_usdt *$usdt_usd")"

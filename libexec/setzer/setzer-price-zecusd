@@ -7,14 +7,14 @@ sources=(
   coinbase
   gemini
   kraken
-  okex
+  okx
 )
 
 case $1 in
   bitfinex|gemini|coinbase) {
     setzer x-price "$1" zec:usd
   };;
-  binance|okex) {
+  binance|okx) {
     zec_usdt=$(setzer x-price "$1" zec:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l<<<"$zec_usdt * $usdt_usd")"
