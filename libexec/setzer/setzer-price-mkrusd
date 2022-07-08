@@ -4,7 +4,6 @@ pair=mkrusd
 sources=(
   bitfinex
   hitbtc
-  kyber
   okex
 )
 
@@ -18,11 +17,6 @@ case $1 in
     mkr_btc=$(setzer x-price "$1" mkr:btc)
     btc_usd=$(setzer price btcusd)
     setzer --format "$(bc -l <<<"$mkr_btc * $btc_usd")"
-  };;
-  kyber) {
-    mkr_eth=$(setzer x-price "$1" mkr:eth)
-    eth_usd=$(setzer price ethusd)
-    setzer --format "$(bc -l <<<"$mkr_eth * $eth_usd")"
   };;
   okex) {
     mkr_btc=$(setzer x-price "$1" mkr:btc)

@@ -7,7 +7,7 @@ sources=(
   hitbtc
   huobi
   kraken
-  okex
+  okx
 )
 
 case $1 in
@@ -17,7 +17,7 @@ case $1 in
   kraken) {
     setzer x-price "$1" xxrp:zusd
   };;
-  huobi|binance|okex) {
+  huobi|binance|okx) {
     xrp_usdt=$(setzer x-price "$1" xrp:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l<<<"$xrp_usdt * $usdt_usd")"

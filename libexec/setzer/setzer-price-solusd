@@ -6,11 +6,11 @@ sources=(
   bitthumb
   gateio
   huobi
-  okex
+  okx
 )
 
 case $1 in
-  gateio|binance|okex) {
+  gateio|binance|okx) {
     sol_usdt=$(setzer x-price "$1" sol:usdt)
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l<<<"$sol_usdt * $usdt_usd")"
