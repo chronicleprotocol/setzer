@@ -13,9 +13,9 @@ sources=(
 
 case $1 in
   balancer_v2|sushiswap) {
-    yfi_weth=$(setzer x-price "$1" yfi:weth)
-    weth_usd=$(setzer price weth:usd)
-    setzer --format "$(bc -l <<<"$yfi_weth * $weth_usd")"
+    weth_yfi=$(setzer x-price "$1" weth:yfi)
+    weth_usd=$(setzer price ethusd)
+    setzer --format "$(bc -l <<<"$weth_usd / $weth_yfi")"
   };;
   binance|okx) {
     yfi_usdt=$(setzer x-price "$1" yfi:usdt)
