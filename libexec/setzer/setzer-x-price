@@ -330,7 +330,6 @@ case $src in
   };;
   upbit) {
     json=$(curl_stat 200 -sS "${ORIGIN_UPBIT_URL}/v1/ticker?markets=${quote^^}-${base^^}")
-    #>&2 echo $(jshon <<<"$json" -e 0 -e trade_price)
     setzer --format "$(jshon <<<"$json" -e 0 -e trade_price)"
   };;
   *) {
