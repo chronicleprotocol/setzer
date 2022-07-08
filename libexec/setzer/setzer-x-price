@@ -26,7 +26,7 @@ ORIGIN_COINBASE_URL="${ORIGIN_COINBASE_URL:-https://api.pro.coinbase.com}"
 ORIGIN_CRYPTOCOMPARE_URL="${ORIGIN_CRYPTOCOMPARE_URL:-https://min-api.cryptocompare.com}"
 ORIGIN_DDEX_URL="${ORIGIN_DDEX_URL:-https://api.ddex.io}"
 ORIGIN_FTX_URL="${ORIGIN_FTX_URL:-https://ftx.com}"
-ORIGIN_FX_URL="${ORIGIN_FX_URL:-https://api.exchangeratesapi.io}"
+ORIGIN_FX_URL="${ORIGIN_FX_URL:-https://openexchangerates.org/api/}"
 ORIGIN_GATEIO_URL="${ORIGIN_GATEIO_URL:-https://fx-api.gateio.ws}"
 ORIGIN_GEMINI_URL="${ORIGIN_GEMINI_URL:-https://api.gemini.com}"
 ORIGIN_HITBTC_URL="${ORIGIN_HITBTC_URL:-https://api.hitbtc.com}"
@@ -196,8 +196,7 @@ case $src in
     setzer --format "$(jshon <<<"$json" -e result -e last -u)"
   };;
   fx) {
-    json=$(curl_stat 200 -sS "${ORIGIN_FX_URL}/latest?base=${base^^}&access_key=${EXCHANGERATES_API_KEY}")
-    >&2 echo $EXCHANGERATES_API_KEY
+    json=$(curl_stat 200 -sS -L "${ORIGIN_FX_URL}/latest.json?app_id=${EXCHANGERATES_API_KEY}&base=${base^^}")
     setzer --format "$(jshon <<<"$json" -e rates -e "${quote^^}" -u)"
   };;
   gateio) {
@@ -331,6 +330,7 @@ case $src in
   };;
   upbit) {
     json=$(curl_stat 200 -sS "${ORIGIN_UPBIT_URL}/v1/ticker?markets=${quote^^}-${base^^}")
+    #>&2 echo $(jshon <<<"$json" -e 0 -e trade_price)
     setzer --format "$(jshon <<<"$json" -e 0 -e trade_price)"
   };;
   *) {
