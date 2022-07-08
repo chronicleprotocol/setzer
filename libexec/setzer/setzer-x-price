@@ -105,12 +105,18 @@ case $src in
         token_contract_addr=000000000000000000000000ae78736cd615f374d3085123a210448e74fc6393
       };;
     esac
-    # keccak256("getPriceRateCache(address)")
-    getPriceRateCache_method_id=b867ee5a
-    res=$(setzer --eth-call "$pool_addr" "$getPriceRateCache_method_id" "$token_contract_addr")
-    Rate=${res:0:64}
-    # price = RateProviderRate * CurveTokenprice
-    price=$(bc -l <<<"ibase=16; (${Rate^^} * ${tokenprice^^} / ${ten_to_18^^} / ${ten_to_18^^})")
+
+    #Extra processing for MetaStable pools
+    if [[ -n $token_contract_addr ]]; then
+      # keccak256("getPriceRateCache(address)")
+      getPriceRateCache_method_id=b867ee5a
+      res=$(setzer --eth-call "$pool_addr" "$getPriceRateCache_method_id" "$token_contract_addr")
+      Rate=${res:0:64}
+      # price = RateProviderRate * CurveTokenprice
+      price=$(bc -l <<<"ibase=16; (${Rate^^} * ${tokenprice^^} / ${ten_to_18^^} / ${ten_to_18^^})")
+    else
+      price=$(bc -l <<<"ibase=16; (${tokenprice^^} / ${ten_to_18^^})")
+    fi
 
     if [[ -n $price ]]; then
       setzer --format $price
