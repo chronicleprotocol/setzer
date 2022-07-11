@@ -26,7 +26,7 @@ ORIGIN_COINBASE_URL="${ORIGIN_COINBASE_URL:-https://api.pro.coinbase.com}"
 ORIGIN_CRYPTOCOMPARE_URL="${ORIGIN_CRYPTOCOMPARE_URL:-https://min-api.cryptocompare.com}"
 ORIGIN_DDEX_URL="${ORIGIN_DDEX_URL:-https://api.ddex.io}"
 ORIGIN_FTX_URL="${ORIGIN_FTX_URL:-https://ftx.com}"
-ORIGIN_FX_URL="${ORIGIN_FX_URL:-https://api.exchangeratesapi.io}"
+ORIGIN_FX_URL="${ORIGIN_FX_URL:-https://openexchangerates.org/api/}"
 ORIGIN_GATEIO_URL="${ORIGIN_GATEIO_URL:-https://fx-api.gateio.ws}"
 ORIGIN_GEMINI_URL="${ORIGIN_GEMINI_URL:-https://api.gemini.com}"
 ORIGIN_HITBTC_URL="${ORIGIN_HITBTC_URL:-https://api.hitbtc.com}"
@@ -75,7 +75,7 @@ case $src in
       WSTETHETH) {
         pool_addr=32296969ef14eb0c6d29669c550d4a0449130230 # wstETH/wETH pool, but prices expressed in stETH/ETH
       };;
-      YFIWETH) {
+      WETHYFI) {
         pool_addr=186084ff790c65088ba694df11758fae4943ee9e # YFI/wETH pool
       };;
     esac
@@ -196,7 +196,7 @@ case $src in
     setzer --format "$(jshon <<<"$json" -e result -e last -u)"
   };;
   fx) {
-    json=$(curl_stat 200 -sS "${ORIGIN_FX_URL}/latest?base=${base^^}&access_key=${EXCHANGERATES_API_KEY}")
+    json=$(curl_stat 200 -sS -L "${ORIGIN_FX_URL}/latest.json?app_id=${EXCHANGERATES_API_KEY}&base=${base^^}")
     setzer --format "$(jshon <<<"$json" -e rates -e "${quote^^}" -u)"
   };;
   gateio) {
@@ -245,7 +245,7 @@ case $src in
         id="0x58dc5a51fe44589beb22e8ce67720b5bc5378009"
         select="token0Price"
       };;
-      YFIWETH) {
+      WETHYFI) {
         id="0x088ee5007c98a9677165d78dd2109ae4a3d04d0c"
         select="token0Price"
       };;
