@@ -78,6 +78,9 @@ case $src in
       WETHYFI) {
         pool_addr=186084ff790c65088ba694df11758fae4943ee9e # YFI/wETH pool
       };;
+      RETHETH) {
+        pool_addr=1e19cf2d73a72ef1332c882f20534b6519be0276 # rETH/wETH, but price returned by the pool includes the staking gains
+      };;
     esac
     # keccak256("getLatest(uint8)")
     getLatest_method_id=b10be739
@@ -88,21 +91,33 @@ case $src in
       "$getLatest_method_id" \
       "0000000000000000000000000000000000000000000000000000000000000000")  #PAIR_PRICE
 
+    # for Balancer Metastable pools, we must use the rate used by the internal Rate Provider
+    # and convert the response from getLatest
     case "${pair^^}" in
       WSTETHETH) {
         # wstETH is a non-rebasing wrapper that exposes the underlying stETH shares
-        wsteth_contract_addr=7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0
-        # keccak256("stEthPerToken()")
-        steth_per_token_method_id=035faf82
-        # how many stETH wei one would receive by unwarpping 10^18 wstETH wei
-        steth_per_wsteth=$(setzer --eth-call "$wsteth_contract_addr" "$steth_per_token_method_id")
-        # wstethEthPrice = stethPerWsteth * stethEthPrice
-        price=$(bc -l <<<"ibase=16; (${steth_per_wsteth^^} / ${ten_to_18^^} * ${tokenprice^} / ${ten_to_18^^})")
+        # converting stETH price to wstETH
+        token_contract_addr=0000000000000000000000007f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0
       };;
-      *) {
-        price=$(bc -l <<<"ibase=16; ${tokenprice^^} / ${ten_to_18^^} ")
+      RETHETH) {
+        # rETH is not rebasing, but its value increases over time respective to ETH
+        # converting ETH price to rETH
+        token_contract_addr=000000000000000000000000ae78736cd615f374d3085123a210448e74fc6393
       };;
     esac
+
+    #Extra processing for MetaStable pools
+    if [[ -n $token_contract_addr ]]; then
+      # keccak256("getPriceRateCache(address)")
+      getPriceRateCache_method_id=b867ee5a
+      res=$(setzer --eth-call "$pool_addr" "$getPriceRateCache_method_id" "$token_contract_addr")
+      Rate=${res:0:64}
+      # price = RateProviderRate * CurveTokenprice
+      price=$(bc -l <<<"ibase=16; (${Rate^^} * ${tokenprice^^} / ${ten_to_18^^} / ${ten_to_18^^})")
+    else
+      price=$(bc -l <<<"ibase=16; (${tokenprice^^} / ${ten_to_18^^})")
+    fi
+
     if [[ -n $price ]]; then
       setzer --format $price
     fi
@@ -154,6 +169,12 @@ case $src in
         crv_contract_addr=DC24316b9AE028F1497c275EB9192a3Ea0f67022 # stETH/ETH pool
         crv_src_token=$(printf '%064X' 1) # stETH index
         crv_dst_token=$(printf '%064X' 0) # ETH index
+        crv_src_amount=$ten_to_18
+      };;
+      RETHWSTETH) {
+        crv_contract_addr=447ddd4960d9fdbf6af9a790560d0af76795cb08 # stETH/ETH pool
+        crv_src_token=$(printf '%064X' 0) # rETH index
+        crv_dst_token=$(printf '%064X' 1) # wstETH index
         crv_src_amount=$ten_to_18
       };;
       *) {
@@ -234,6 +255,23 @@ case $src in
   poloniex) {
     json=$(curl_stat 200 -sS "${ORIGIN_POLONIEX_URL}/public?command=returnTicker")
     setzer --format "$(jshon <<<"$json" -e "${quote^^}"_"${base^^}" -e last -u)"
+  };;
+  rocketpool) {
+    ten_to_18=$(printf '%064X' 1000000000000000000) # 10^18 left-padded to 32 bytes
+    # RETHETH only
+    contract_addr="0xae78736Cd615f374D3085123A210448E74Fc6393"
+
+    # keccak256("getExchangeRate()")
+    get_rate_method_id=e6aa216c
+    rate=$(setzer \
+      --eth-call \
+      "$contract_addr" \
+      "$get_rate_method_id"
+    )
+    price=$(bc -l <<<"ibase=16; ${rate^^} / ${ten_to_18^^}")
+    if [[ -n $price ]]; then
+      setzer --format $price
+    fi
   };;
   sushiswap) {
     case "${pair^^}" in
