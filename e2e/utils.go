@@ -23,8 +23,7 @@ func (s *SmockerAPISuite) Setup() {
 	s.Require().True(exist, "SMOCKER_HOST env variable have to be set")
 
 	s.api = smocker.API{
-		Host: smockerHost,
-		Port: 8081,
+		URL: fmt.Sprintf("%s:%d", smockerHost, 8081),
 	}
 
 	s.url = fmt.Sprintf("%s:8080", smockerHost)
