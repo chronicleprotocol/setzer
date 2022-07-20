@@ -3,7 +3,7 @@ module github.com/makerdao/setzer-e2e
 go 1.17
 
 require (
-	github.com/chronicleprotocol/infestor v0.2.8-0.20220720114723-1f1f990f1ddd
+	github.com/chronicleprotocol/infestor v0.2.8
 	github.com/stretchr/testify v1.7.0
 )
 
