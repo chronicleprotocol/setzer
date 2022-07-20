@@ -21,7 +21,9 @@ func (s *PriceWSTETHE2ESuite) TestPrice() {
 	err := infestor.NewMocksBuilder().
 		Reset().
 		Add(origin.NewExchange("wsteth").WithSymbol("WSTETH/ETH").WithPrice(1.062334)).
-		Add(origin.NewExchange("balancerV2").WithSymbol("STETH/ETH").WithPrice(1.0573)).
+		Add(origin.NewExchange("balancerV2").WithSymbol("STETH/ETH").
+			WithCustom("rate", "0000000000000000000000000000000000000000000000000EF976AF325D68E80000000000000000000000000000000000000000000000000000000000002A300000000000000000000000000000000000000000000000000000000062D81469").
+			WithCustom("price", "0x0000000000000000000000000000000000000000000000000d925d70884a3395")).
 		Add(origin.NewExchange("curve").WithSymbol("STETH/ETH").WithPrice(1.044)).
 		Add(origin.NewExchange("bitstamp").WithSymbol("ETH/USD").WithPrice(2339)).
 		Add(origin.NewExchange("ftx").WithSymbol("ETH/USD").WithPrice(2331)).
@@ -35,5 +37,5 @@ func (s *PriceWSTETHE2ESuite) TestPrice() {
 
 	out, _, err := callSetzer("price", "wstethusd")
 	s.Require().NoError(err)
-	s.Require().Equal("2492.7824058521", out)
+	s.Require().Equal("2480.0612649164", out)
 }
