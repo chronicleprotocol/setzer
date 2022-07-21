@@ -7,6 +7,27 @@ sources=(
   rocketpool
 )
 
+circuit_breaker() {
+    id='0xa3105dee5ec73a7003482b1a8968dc88666f3589'
+    read_sig='57de26a4'     # keccak256("read()")
+    divisor_sig='1f2dc5ef'  # keccak256("divisor()")
+
+    deviation="$1"
+
+    val=$(setzer --eth-call $id $read_sig)
+    val=$(printf "%d" $((16#$val)))
+    div=$(setzer --eth-call $id $divisor_sig)
+    div=$(printf "%d" $((16#$div)))
+
+    circuit=$(echo "scale=5; $val / $div" | bc -l)
+
+    # Circuit value must always be greater than deviation
+    [[ $(bc -l <<< "$circuit > $deviation") -eq 1 ]] || {
+      echo >&2 "Error: rETH circuit breaker tripped - $circuit < $deviation"
+      exit 1
+    }
+}
+
 case $1 in
   balancer_v2|rocketpool) {
     reth_eth=$(setzer twap "$1" reth:eth)
@@ -20,6 +41,13 @@ case $1 in
   };;
   *) {
     export SETZER_MIN_MEDIAN=2
-    setzer --price-commands "-$1-" $pair "${sources[@]}"
+    reth_usd=$(setzer price rethusd rocketpool) # This is the reference price
+    price=$(setzer --price-commands "-$1-" $pair "${sources[@]}")
+    # NOTE: Deviation is the percent difference between the RocketPool
+    # price and market price. Sign is removed so deviation in either direction,
+    # positive or negative, will trigger the circuit breaker.
+    deviation=$(echo "1 - $reth_usd / $price" | bc -l | sed 's/-//')
+    circuit_breaker $deviation
+    echo "$price"
   };;
 esac
