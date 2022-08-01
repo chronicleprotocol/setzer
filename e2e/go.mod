@@ -1,6 +1,6 @@
 module github.com/makerdao/setzer-e2e
 
-go 1.17
+go 1.18
 
 require (
 	github.com/chronicleprotocol/infestor v0.2.10
