@@ -40,14 +40,18 @@ case $1 in
     setzer --format "$(bc -l <<<"$reth_wsteth * $wsteth_usd")"
   };;
   *) {
-    export SETZER_MIN_MEDIAN=2
-    reth_usd=$(setzer price rethusd rocketpool) # This is the reference price
-    price=$(setzer --price-commands "-$1-" $pair "${sources[@]}")
-    # NOTE: Deviation is the percent difference between the RocketPool
-    # price and market price. Sign is removed so deviation in either direction,
-    # positive or negative, will trigger the circuit breaker.
-    deviation=$(echo "1 - $reth_usd / $price" | bc -l | sed 's/-//')
-    circuit_breaker $deviation
-    echo "$price"
+    if [[ -z "$1" || "$1" = "median" ]]; then
+        export SETZER_MIN_MEDIAN=2
+        reth_usd=$(setzer price rethusd rocketpool) # This is the reference price
+        price=$(setzer --price-commands "-$1-" $pair "${sources[@]}")
+        # NOTE: Deviation is the percent difference between the RocketPool
+        # price and market price. Sign is removed so deviation in either direction,
+        # positive or negative, will trigger the circuit breaker.
+        deviation=$(echo "1 - $reth_usd / $price" | bc -l | sed 's/-//')
+        circuit_breaker $deviation
+        echo "$price"
+    else
+        setzer --price-commands "-$1-" $pair "${sources[@]}"
+    fi
   };;
 esac
