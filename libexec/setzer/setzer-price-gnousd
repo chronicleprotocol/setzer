@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -e
+pair=gnousd
+# TODO(jamesr) not all sources good... https://www.notion.so/GNO-Collateral-Onboarding-Oracle-Assessment-MIP10c3-SP23-05a625bf7746481790088d2c696d1e2f
+sources=(
+  # bitfinex
+  # bittrex
+  # coinbase
+  # cryptocompare
+  # huobi
+  balancer_v2
+  binance 
+  kraken
+  uniswap_v3
+)
+
+case $1 in
+  coinbase|bitfinex|cryptocompare) {
+    setzer x-price "$1" $pair
+  };;
+   kraken) {
+    gnoxbt=$(setzer x-price "$1" gno:xbt)
+    btcusd=$(setzer price btcusd)
+    setzer --format "$(bc -l<<<"$gnoxbt * $btcusd")"
+  };;
+  bittrex) {
+    gnoeth=$(setzer x-price "$1" gno:eth)
+    ethusd=$(setzer price ethusd)
+    setzer --format "$(bc -l<<<"$gnoeth * $ethusd")"
+  };;
+  binance) {
+    gnousdt=$(setzer x-price "$1" gno:usdt)
+    usdtusd=$(setzer price usdtusd)
+    setzer --format "$(bc -l<<<"$gnousdt * $usdtusd")"
+  };;
+  balancer_v2) {
+    gnoweth=$(setzer x-price "$1" gno:weth)
+    wethusd=$(setzer price ethusd)
+    setzer --format "$(bc -l <<<"$wethusd / $gnoweth")"
+  };;
+  uniswap_v3) {
+    gnoeth=$(setzer x-price "$1" gno:eth)
+    ethusd=$(setzer price ethusd)
+     >&2 echo "james $gnoeth $ethusd"
+    setzer --format "$(bc -l <<<"$ethusd * $gnoeth")"
+  };;
+  huobi) {
+    gnousdt=$(setzer x-price "$1" gno:usdt)
+    usdtusd=$(setzer price usdtusd)
+    setzer --format "$(bc -l<<<"$gnousdt * $usdtusd")"
+  };;
+  *) {
+    setzer --price-commands "-$1-" $pair "${sources[@]}"
+  };;
+esac
