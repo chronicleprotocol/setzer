@@ -9,18 +9,10 @@ sources=(
 )
 
 case $1 in
-  coinbase|bitfinex|cryptocompare) {
-    setzer x-price "$1" $pair
-  };;
    kraken) {
     gnoxbt=$(setzer x-price "$1" gno:xbt)
     btcusd=$(setzer price btcusd)
     setzer --format "$(bc -l<<<"$gnoxbt * $btcusd")"
-  };;
-  bittrex) {
-    gnoeth=$(setzer x-price "$1" gno:eth)
-    ethusd=$(setzer price ethusd)
-    setzer --format "$(bc -l<<<"$gnoeth * $ethusd")"
   };;
   binance) {
     gnousdt=$(setzer x-price "$1" gno:usdt)
@@ -36,11 +28,6 @@ case $1 in
     gnoeth=$(setzer x-price "$1" gno:eth)
     ethusd=$(setzer price ethusd)
     setzer --format "$(bc -l <<<"$ethusd * $gnoeth")"
-  };;
-  huobi) {
-    gnousdt=$(setzer x-price "$1" gno:usdt)
-    usdtusd=$(setzer price usdtusd)
-    setzer --format "$(bc -l<<<"$gnousdt * $usdtusd")"
   };;
   *) {
     setzer --price-commands "-$1-" $pair "${sources[@]}"
