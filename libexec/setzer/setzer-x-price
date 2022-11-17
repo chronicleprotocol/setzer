@@ -80,6 +80,9 @@ case $src in
       RETHETH) {
         pool_addr=1e19cf2d73a72ef1332c882f20534b6519be0276 # rETH/wETH, but price returned by the pool includes the staking gains
       };;
+      GNOWETH) {
+        pool_addr=0xF4C0DD9B82DA36C07605df83c8a416F11724d88b
+      };;
     esac
     # keccak256("getLatest(uint8)")
     getLatest_method_id=b10be739
@@ -346,6 +349,10 @@ case $src in
       };;
       LINKETH) {
         id="0xa6cc3c2531fdaa6ae1a3ca84c2855806728693e8"
+        select="token1Price"
+      };;
+      GNOETH) {
+        id="0xf56d08221b5942c428acc5de8f78489a97fc5599"
         select="token1Price"
       };;
       WNXMETH) {
