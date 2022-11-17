@@ -5,14 +5,13 @@ sources=(
   binance
   binance_us
   coinbase
-  ftx
   okx
   kraken
   upbit
 )
 
 case $1 in
-  binance_us|coinbase|ftx|kraken) {
+  binance_us|coinbase|kraken) {
     setzer x-price "$1" $pair
   };;
   binance|okx) {

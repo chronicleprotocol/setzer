@@ -5,7 +5,6 @@ sources=(
   binance
   bitfinex
   coinbase
-  ftx
   kraken
   okx
 )
@@ -19,7 +18,7 @@ case $1 in
   bitfinex) {
     setzer x-price "$1" ust:usd
   };;
-  coinbase|ftx) {
+  coinbase) {
     setzer x-price "$1" usdt:usd
   };;
   kraken) {

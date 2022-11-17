@@ -5,13 +5,12 @@ sources=(
   binance_us
   bitstamp
   coinbase
-  ftx
   gemini
   kraken
 )
 
 case $1 in
-  binance_us|bitstamp|coinbase|ftx|gemini) {
+  binance_us|bitstamp|coinbase|gemini) {
     setzer x-price "$1" $pair
   };;
   kraken) {

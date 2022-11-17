@@ -23,7 +23,6 @@ func (s *PriceRETHSuite) TestPrice() {
 		Add(origin.NewExchange("binance").WithSymbol("ETH/USD").WithPrice(1601.5438929600)).
 		Add(origin.NewExchange("bitstamp").WithSymbol("ETH/USD").WithPrice(1601.9400000000)).
 		Add(origin.NewExchange("coinbase").WithSymbol("ETH/USD").WithPrice(1601.2500000000)).
-		Add(origin.NewExchange("ftx").WithSymbol("ETH/USD").WithPrice(1600.6000000000)).
 		Add(origin.NewExchange("gemini").WithSymbol("ETH/USD").WithPrice(1602.2900000000)).
 		Add(origin.NewExchange("kraken").WithSymbol("ETH/USD").WithPrice(1603.2900000000)).
 		Add(origin.NewExchange("uniswap_v3").WithPrice(1595.2011018009)).
@@ -48,7 +47,6 @@ func (s *PriceRETHSuite) TestCircuit() {
 		Add(origin.NewExchange("binance").WithSymbol("ETH/USD").WithPrice(1601.5438929600)).
 		Add(origin.NewExchange("bitstamp").WithSymbol("ETH/USD").WithPrice(1601.9400000000)).
 		Add(origin.NewExchange("coinbase").WithSymbol("ETH/USD").WithPrice(1601.2500000000)).
-		Add(origin.NewExchange("ftx").WithSymbol("ETH/USD").WithPrice(1600.6000000000)).
 		Add(origin.NewExchange("gemini").WithSymbol("ETH/USD").WithPrice(1602.2900000000)).
 		Add(origin.NewExchange("kraken").WithSymbol("ETH/USD").WithPrice(1603.2900000000)).
 		Add(origin.NewExchange("uniswap_v3").WithPrice(1595.2011018009)).

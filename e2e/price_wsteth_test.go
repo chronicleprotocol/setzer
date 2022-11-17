@@ -26,7 +26,6 @@ func (s *PriceWSTETHE2ESuite) TestPrice() {
 			WithCustom("price", "0x0000000000000000000000000000000000000000000000000d925d70884a3395")).
 		Add(origin.NewExchange("curve").WithSymbol("STETH/ETH").WithPrice(1.044)).
 		Add(origin.NewExchange("bitstamp").WithSymbol("ETH/USD").WithPrice(2339)).
-		Add(origin.NewExchange("ftx").WithSymbol("ETH/USD").WithPrice(2331)).
 		Add(origin.NewExchange("coinbase").WithSymbol("ETH/USD").WithPrice(2339)).
 		Add(origin.NewExchange("gemini").WithSymbol("ETH/USD").WithPrice(2340)).
 		Add(origin.NewExchange("kraken").WithSymbol("ETH/USD").WithPrice(2338)).
