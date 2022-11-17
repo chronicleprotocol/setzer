@@ -37,5 +37,5 @@ func (s *PriceWSTETHE2ESuite) TestPrice() {
 
 	out, _, err := callSetzer("price", "wstethusd")
 	s.Require().NoError(err)
-	s.Require().Equal(dropLastDigits("2480.0612649164", 1), dropLastDigits(out, 1))
+	s.Require().Equal(toPrecision("2480.0612649164", 10), toPrecision(out, 10))
 }
