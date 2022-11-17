@@ -4,7 +4,6 @@ pair=uniusd
 sources=(
   binance
   coinbase
-  ftx
   huobi
   okx
   uniswap_v3
@@ -16,7 +15,7 @@ case $1 in
     btc_usd=$(setzer price btcusd)
     setzer --format "$(bc -l <<<"$uni_btc * $btc_usd")"
   };;
-  coinbase|ftx) {
+  coinbase) {
     setzer x-price "$1" uni:usd
   };;
   huobi|okx) {
