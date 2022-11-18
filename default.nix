@@ -3,7 +3,7 @@ coreutils, curl, jshon, bc, gnused, perl, datamash, git }:
 
 stdenv.mkDerivation rec {
   name = "setzer-mcd-${version}";
-  version = "0.6.1";
+  version = "0.7.0";
   src = ./.;
 
   nativeBuildInputs = [makeWrapper];
