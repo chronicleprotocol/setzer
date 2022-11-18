@@ -165,29 +165,6 @@ func (s *ValidExchangesE2ETest) TestCryptocompare() {
 	s.Require().Equal("1.0000000000", out)
 }
 
-func (s *ValidExchangesE2ETest) TestFTX() {
-	err := infestor.NewMocksBuilder().
-		Reset().
-		Add(origin.NewExchange("ftx").WithSymbol("ETH/USD").WithPrice(1)).
-		Add(origin.NewExchange("ftx").WithSymbol("LINK/USD").WithPrice(2)).
-		Add(origin.NewExchange("ftx").WithSymbol("MATIC/USD").WithPrice(3)).
-		Deploy(s.api)
-
-	s.Require().NoError(err)
-
-	out, _, err := callSetzer("x-price", "ftx", "ethusd")
-	s.Require().NoError(err)
-	s.Require().Equal("1.0000000000", out)
-
-	out, _, err = callSetzer("x-price", "ftx", "link:usd")
-	s.Require().NoError(err)
-	s.Require().Equal("2.0000000000", out)
-
-	out, _, err = callSetzer("x-price", "ftx", "matic:usd")
-	s.Require().NoError(err)
-	s.Require().Equal("3.0000000000", out)
-}
-
 func (s *ValidExchangesE2ETest) TestGateIO() {
 	err := infestor.NewMocksBuilder().
 		Reset().

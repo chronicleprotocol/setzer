@@ -5,13 +5,12 @@ sources=(
   binance
   huobi
   coinbase
-  ftx
   gemini
   kraken
 )
 
 case $1 in
-  coinbase|ftx|gemini|kraken) {
+  coinbase|gemini|kraken) {
     setzer x-price "$1" matic:usd
   };;
   binance|huobi) {

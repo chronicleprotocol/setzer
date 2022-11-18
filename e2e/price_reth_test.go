@@ -1,6 +1,7 @@
 package e2e
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/chronicleprotocol/infestor"
@@ -23,7 +24,6 @@ func (s *PriceRETHSuite) TestPrice() {
 		Add(origin.NewExchange("binance").WithSymbol("ETH/USD").WithPrice(1601.5438929600)).
 		Add(origin.NewExchange("bitstamp").WithSymbol("ETH/USD").WithPrice(1601.9400000000)).
 		Add(origin.NewExchange("coinbase").WithSymbol("ETH/USD").WithPrice(1601.2500000000)).
-		Add(origin.NewExchange("ftx").WithSymbol("ETH/USD").WithPrice(1600.6000000000)).
 		Add(origin.NewExchange("gemini").WithSymbol("ETH/USD").WithPrice(1602.2900000000)).
 		Add(origin.NewExchange("kraken").WithSymbol("ETH/USD").WithPrice(1603.2900000000)).
 		Add(origin.NewExchange("uniswap_v3").WithPrice(1595.2011018009)).
@@ -39,7 +39,7 @@ func (s *PriceRETHSuite) TestPrice() {
 
 	out, _, err := callSetzer("price", "rethusd")
 	s.Require().NoError(err)
-	s.Require().Equal(dropLastDigits("1645.4670410364", 1), dropLastDigits(out, 1))
+	s.Require().Equal(toPrecision("1645.821567", 6), toPrecision(out, 6))
 }
 
 func (s *PriceRETHSuite) TestCircuit() {
@@ -48,7 +48,6 @@ func (s *PriceRETHSuite) TestCircuit() {
 		Add(origin.NewExchange("binance").WithSymbol("ETH/USD").WithPrice(1601.5438929600)).
 		Add(origin.NewExchange("bitstamp").WithSymbol("ETH/USD").WithPrice(1601.9400000000)).
 		Add(origin.NewExchange("coinbase").WithSymbol("ETH/USD").WithPrice(1601.2500000000)).
-		Add(origin.NewExchange("ftx").WithSymbol("ETH/USD").WithPrice(1600.6000000000)).
 		Add(origin.NewExchange("gemini").WithSymbol("ETH/USD").WithPrice(1602.2900000000)).
 		Add(origin.NewExchange("kraken").WithSymbol("ETH/USD").WithPrice(1603.2900000000)).
 		Add(origin.NewExchange("uniswap_v3").WithPrice(1595.2011018009)).
@@ -68,6 +67,14 @@ func (s *PriceRETHSuite) TestCircuit() {
 	s.Require().Error(err)
 }
 
-func dropLastDigits(s string, n int) string {
-	return s[:len(s)-n]
+// toPrecision reduces precision of a string to the given number of decimal places.
+// It does not round the number.
+func toPrecision(s string, p int) string {
+	if i := strings.Index(s, "."); i >= 0 {
+		if len(s) <= i+p+1 {
+			return s + strings.Repeat("0", i+p+1-len(s))
+		}
+		return s[:i+p+1]
+	}
+	return s
 }

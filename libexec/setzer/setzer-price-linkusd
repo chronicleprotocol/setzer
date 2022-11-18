@@ -5,7 +5,6 @@ sources=(
   binance
   bitstamp
   coinbase
-  ftx
   gemini
   kraken
   uniswap_v3
@@ -17,7 +16,7 @@ case $1 in
     usdt_usd=$(setzer price usdtusd)
     setzer --format "$(bc -l <<<"$link_usdt * $usdt_usd")"
   };;
-  bitstamp|coinbase|ftx|gemini|kraken) {
+  bitstamp|coinbase|gemini|kraken) {
     setzer x-price "$1" link:usd
   };;
   uniswap_v3) {
