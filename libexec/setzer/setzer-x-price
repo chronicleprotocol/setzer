@@ -36,7 +36,7 @@ ORIGIN_OKEX_URL="${ORIGIN_OKEX_URL:-https://www.okex.com}"
 ORIGIN_OKX_URL="${ORIGIN_OKX_URL:-https://www.okx.com}"
 ORIGIN_POLONIEX_URL="${ORIGIN_POLONIEX_URL:-https://poloniex.com}"
 ORIGIN_UPBIT_URL="${ORIGIN_UPBIT_URL:-https://api.upbit.com}"
-ORIGIN_GSU_URL="${ORIGIN_GSU_URL:-https://goerli.gsu.io/Umbraco/Api/Rates/GSU/?symbol=}"
+ORIGIN_GSU_URL="${ORIGIN_GSU_URL:-https://goerli.gsu.io/Umbraco/Api/Rates/GSU/?symbol}"
 
 # Wrap curl and surface error on mismatch of expected HTTP status
 curl_stat() {
@@ -50,7 +50,8 @@ curl_stat() {
 
 case $src in
  gsu) {
-    json=$(curl_stat 200 -sS "$ORIGIN_GSU_URL$pair")
+  #pair is hardcoded right now.
+    json=$(curl_stat 200 -sS "$ORIGIN_GSU_URL=ETH")
     setzer --format "$(jshon <<<"$json" -e price -u)"
   };;
   balancer) {

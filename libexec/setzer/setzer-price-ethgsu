@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-pair=ethgsu
+pair=ETHGSU
 sources=(
   gsu
 
@@ -11,6 +11,7 @@ case $1 in
       };;
 
   *) {
-    setzer --price-commands "--" $pair "${sources[@]}"
+    export SETZER_MIN_MEDIAN=1
+    setzer --price-commands "-$1-" $pair "${sources[@]}"
   };;
 esac
