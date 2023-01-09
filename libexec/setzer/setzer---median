@@ -27,5 +27,4 @@ get-median () {
 [[ ! -e $file ]] && get-median
 
 [ "$(( $(date +"%s") - $(date +"%s" -r "$file") ))" -gt "$SETZER_CACHE_EXPIRY" ] && get-median
-get-median
 cat "$file"
