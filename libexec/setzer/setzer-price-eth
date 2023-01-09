@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+pair=ETH
+sources=(
+  gsu
+
+)
+case $1 in
+  gsu) {
+    setzer x-price "$1" "$pair"
+      };;
+
+  *) {
+    export SETZER_MIN_MEDIAN=1
+    setzer --price-commands "-$1-" $pair "${sources[@]}"
+  };;
+esac

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e
+pair=ethgsu
+sources=(
+  gsu
+
+)
+case $1 in
+  gsu) {
+    setzer x-price "$1" "$pair"
+      };;
+
+  *) {
+    setzer --price-commands "--" $pair "${sources[@]}"
+  };;
+esac

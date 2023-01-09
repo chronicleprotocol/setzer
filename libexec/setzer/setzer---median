@@ -15,7 +15,6 @@ get-median () {
       fi
     fi
   done
-
   if [[ ${#prices[@]} -lt $SETZER_MIN_MEDIAN ]]; then
     echo "Error: not enough sources to provide a median: ${#prices[@]} < $SETZER_MIN_MEDIAN"
     exit 1
@@ -28,5 +27,5 @@ get-median () {
 [[ ! -e $file ]] && get-median
 
 [ "$(( $(date +"%s") - $(date +"%s" -r "$file") ))" -gt "$SETZER_CACHE_EXPIRY" ] && get-median
-
+get-median
 cat "$file"
