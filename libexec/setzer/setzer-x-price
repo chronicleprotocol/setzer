@@ -52,7 +52,7 @@ case $src in
  gsu) {
   #pair is hardcoded right now.
     json=$(curl_stat 200 -sS "$ORIGIN_GSU_URL=ETH")
-    setzer --format "$(jshon <<<"$json" -e price -u)"
+    setzer --format "$(seth --from-wei $(jshon <<<"$json" -e price -u))"
   };;
   balancer) {
     case "${pair^^}" in

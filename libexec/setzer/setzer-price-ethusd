@@ -2,30 +2,16 @@
 set -e
 pair=ethusd
 sources=(
-  binance
-  bitstamp
-  coinbase
-  gemini
-  kraken
-  uniswap_v3
+gsu
 )
 
 case $1 in
-  binance) {
-    eth_btc=$(setzer x-price "$1" ethbtc)
-    btc_usd=$(setzer price btcusd)
-    setzer --format "$(bc -l <<<"$eth_btc * $btc_usd")"
-  };;
-  bitstamp|coinbase|gemini) {
+   gsu) {
     setzer x-price "$1" "$pair"
-  };;
-  kraken) {
-    setzer x-price kraken xeth:zusd
-  };;
-  uniswap_v3) {
-    setzer x-price "$1" ethusdc
-  };;
+      };;
+
   *) {
+    export SETZER_MIN_MEDIAN=1
     setzer --price-commands "-$1-" $pair "${sources[@]}"
   };;
 esac
