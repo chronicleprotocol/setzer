@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -e
+set -o pipefail 
+
 [ "$DEBUG" == 'true' ] && set -x
 
 src=$1
@@ -14,7 +16,6 @@ else
 fi
 
 # Setting up base URLs for exchanges
-ORIGIN_THEGRAPH_URL="${ORIGIN_THEGRAPH_URL:-https://api.thegraph.com}"
 ORIGIN_BINANCE_URL="${ORIGIN_BINANCE_URL:-https://www.binance.com}"
 ORIGIN_BINANCE_US_URL="${ORIGIN_BINANCE_US_URL:-https://www.binance.us}"
 ORIGIN_BITFINEX_URL="${ORIGIN_BITFINEX_URL:-https://api.bitfinex.com}"
@@ -35,7 +36,9 @@ ORIGIN_KUCOIN_URL="${ORIGIN_KUCOIN_URL:-https://api.kucoin.com}"
 ORIGIN_OKEX_URL="${ORIGIN_OKEX_URL:-https://www.okex.com}"
 ORIGIN_OKX_URL="${ORIGIN_OKX_URL:-https://www.okx.com}"
 ORIGIN_POLONIEX_URL="${ORIGIN_POLONIEX_URL:-https://poloniex.com}"
+ORIGIN_THEGRAPH_URL="${ORIGIN_THEGRAPH_URL:-https://api.thegraph.com}"
 ORIGIN_UPBIT_URL="${ORIGIN_UPBIT_URL:-https://api.upbit.com}"
+ORIGIN_ISHARES_URL="${ORIGIN_ISHARES_URL:-https://ishares.com}"
 
 # Wrap curl and surface error on mismatch of expected HTTP status
 curl_stat() {
@@ -371,6 +374,17 @@ case $src in
   upbit) {
     json=$(curl_stat 200 -sS "${ORIGIN_UPBIT_URL}/v1/ticker?markets=${quote^^}-${base^^}")
     setzer --format "$(jshon <<<"$json" -e 0 -e trade_price)"
+  };;
+  ishares) {
+        case $(echo $quote | tr '[:upper:]' '[:lower:]') in
+            ibtausd) {
+                ishares_url="${ORIGIN_ISHARES_URL}/uk/individual/en/products/287340/ishares-treasury-bond-1-3yr-ucits-etf?switchLocale=y&siteEntryPassthrough=true"
+                price=$(curl_stat 200 -sSL "$ishares_url" | htmlq 'span.header-nav-data' --text | grep -E 'USD \d{1,}\.\d{2,}')
+                price=$(echo "$price" | sed 's/USD //')
+                [[ ! -z "$price" ]]
+                echo "$price"
+            };;
+        esac
   };;
   *) {
     echo >&2 "Error: exchange not recognised: $src"
