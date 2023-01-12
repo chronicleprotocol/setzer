@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e
+pair=ibtausd
+sources=(
+    ishares
+)
+
+# NOTE(jamesr) Did not use the usual 'case' pattern here since there is
+# literally only one source for this. If that changes, it should be added back.
+timeout "$SETZER_TIMEOUT" setzer x-price "${sources[0]}" "$pair"

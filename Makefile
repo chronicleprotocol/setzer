@@ -22,3 +22,7 @@ e2e:
 	fi
 	docker build -t setzer -f e2e/Dockerfile .
 	docker -v run -i --rm --link smocker setzer
+
+.PHONY: unit-test
+unit-test:
+	./test/units.sh
