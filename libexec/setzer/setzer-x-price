@@ -50,8 +50,7 @@ curl_stat() {
 
 case $src in
  gsu) {
-  #pair is hardcoded right now.
-    json=$(curl_stat 200 -sS "$ORIGIN_GSU_URL=ETH")
+    json=$(curl_stat 200 -sS "$ORIGIN_GSU_URL=$pair")
     setzer --format "$(echo "scale=5;$(jshon <<< "$json" -e price -u)/10^18" | bc)"
   };;
   balancer) {

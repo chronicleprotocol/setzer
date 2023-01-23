@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -e
-pair=ETHGSU
+pair=btcgsu
 sources=(
-  gsu
-
+gsu
 )
+
 case $1 in
-  gsu) {
-    setzer x-price "$1" "ETH"
+   gsu) {
+    setzer x-price "$1" "BTC"
       };;
 
   *) {
