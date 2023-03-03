@@ -52,7 +52,6 @@ case $src in
  gsu) {
     json=$(curl_stat 200 -sS "$ORIGIN_GSU_URL=$pair")
     setzer --format "$(jshon <<<"$json" -e price -u)"
-    # setzer --format "$(echo "scale=5;$(jshon <<< "$json" -e price -u)/10^18" | bc)"
   };;
   balancer) {
     case "${pair^^}" in
