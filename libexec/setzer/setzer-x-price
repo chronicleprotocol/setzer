@@ -358,6 +358,10 @@ case $src in
         id="0xf56d08221b5942c428acc5de8f78489a97fc5599"
         select="token1Price"
       };;
+      MKRWETH) {
+        id="0xe8c6c9227491c0a8156a0106a0204d881bb7e531"
+        select="token1Price"
+      };;
       WNXMETH) {
         id="0x058d79a4c6eb5b11d0248993ffa1faa168ddd3c0"
         select="token1Price"
