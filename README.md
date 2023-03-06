@@ -17,7 +17,6 @@ Commands:
    test            Test all price feeds
 ```
 
-
 ## Installation
 
 Dependencies:
@@ -28,6 +27,7 @@ Dependencies:
 * GNU `date`
 * [jshon](http://kmkeen.com/jshon/)
 * GNU `timeout`
+* [htmlq](https://github.com/mgdm/htmlq)
 
 Install via make:
 
