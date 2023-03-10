@@ -5,14 +5,17 @@ sources=(
   coinbase
   kraken
   gemini
-  binance_us
+  binance
   bitstamp
   uniswap_v3
 )
 
 case $1 in
-  coinbase|kraken|gemini|binance_us|bitstamp) {
+  coinbase|kraken|gemini|bitstamp) {
     setzer x-price "$1" mkr:usd
+  };;
+  binance) {
+    setzer x-price "$1" mkr:usdt
   };;
   uniswap_v3) {
     mkrweth=$(setzer x-price "$1" mkr:weth)
