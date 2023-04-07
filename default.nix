@@ -1,5 +1,5 @@
 { stdenv, makeWrapper, lib, fetchFromGitHub, glibcLocales,
-coreutils, curl, jshon, bc, gnused, perl, datamash, git,curl, htmlq }:
+coreutils, curl, jshon, bc, gnused, perl, datamash, git, grep, htmlq }:
 
 stdenv.mkDerivation rec {
   pname = "setzer";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   buildPhase = "true";
   makeFlags = ["prefix=$(out)"];
   postInstall = let path = lib.makeBinPath [
-    coreutils curl jshon bc gnused perl datamash git curl htmlq
+    coreutils curl jshon bc gnused perl datamash git grep htmlq
   ]; in ''
     wrapProgram "$out/bin/setzer" --set PATH "${path}" \
       ${if glibcLocales != null then
