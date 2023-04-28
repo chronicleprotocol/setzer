@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+pair=ETHGSU
+sources=(
+  gsu
+  gsu1
+  gsu2
+)
+case $1 in
+  gsu) {
+    setzer x-price "$1" "ETH"
+      };;
+  gsu1) {
+    setzer x-price "$1" "ETH"
+      };;
+  gsu2) {
+    setzer x-price "$1" "ETH"
+      };;
+
+  *) {
+    setzer --price-commands "-$1-" $pair "${sources[@]}"
+  };;
+esac

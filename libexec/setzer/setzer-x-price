@@ -39,6 +39,10 @@ ORIGIN_POLONIEX_URL="${ORIGIN_POLONIEX_URL:-https://poloniex.com}"
 ORIGIN_THEGRAPH_URL="${ORIGIN_THEGRAPH_URL:-https://api.thegraph.com}"
 ORIGIN_UPBIT_URL="${ORIGIN_UPBIT_URL:-https://api.upbit.com}"
 ORIGIN_ISHARES_URL="${ORIGIN_ISHARES_URL:-https://ishares.com}"
+ORIGIN_GSU_URL="${ORIGIN_GSU_URL:-https://api.gsucoin.app/Products/GSULive/?symbol}"
+ORIGIN_GSU_1_URL="${ORIGIN_GSU_1_URL:-https://api1.gsucoin.app/Products/GSULive/?symbol}"
+ORIGIN_GSU_2_URL="${ORIGIN_GSU_2_URL:-https://api2.gsucoin.app/Products/GSULive/?symbol}"
+
 
 # Wrap curl and surface error on mismatch of expected HTTP status
 curl_stat() {
@@ -51,6 +55,18 @@ curl_stat() {
 }
 
 case $src in
+   gsu) {
+    json=$(curl_stat 200 -sS "$ORIGIN_GSU_URL=$pair")
+    setzer --format "$(jshon <<<"$json" -e price -u)"
+  };;
+  gsu1) {
+    json=$(curl_stat 200 -sS "$ORIGIN_GSU_1_URL=$pair")
+    setzer --format "$(jshon <<<"$json" -e price -u)"
+  };;
+  gsu2) {
+    json=$(curl_stat 200 -sS "$ORIGIN_GSU_2_URL=$pair")
+    setzer --format "$(jshon <<<"$json" -e price -u)"
+  };;
   balancer) {
     case "${pair^^}" in
       BALUSD) {
