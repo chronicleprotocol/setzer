@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+pair=USDTGSU
+sources=(
+  gsu
+  gsu1
+  gsu2
+)
+case $1 in
+  gsu) {
+    setzer x-price "$1" "USDT"
+      };;
+  gsu1) {
+    setzer x-price "$1" "USDT"
+      };;
+  gsu2) {
+    setzer x-price "$1" "USDT"
+      };;
+
+  *) {
+    setzer --price-commands "-$1-" $pair "${sources[@]}"
+  };;
+esac
