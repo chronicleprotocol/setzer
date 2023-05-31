@@ -2,26 +2,25 @@
 set -e
 pair=mkrusd
 sources=(
-  bitfinex
-  hitbtc
-  okex
+  coinbase
+  kraken
+  gemini
+  binance
+  bitstamp
+  uniswap_v3
 )
 
 case $1 in
-  bitfinex) {
-    mkr_eth=$(setzer x-price "$1" mkr:eth)
-    eth_usd=$(setzer price ethusd)
-    setzer --format "$(bc -l <<<"$mkr_eth * $eth_usd")"
+  coinbase|kraken|gemini|bitstamp) {
+    setzer x-price "$1" mkr:usd
   };;
-  hitbtc) {
-    mkr_btc=$(setzer x-price "$1" mkr:btc)
-    btc_usd=$(setzer price btcusd)
-    setzer --format "$(bc -l <<<"$mkr_btc * $btc_usd")"
+  binance) {
+    setzer x-price "$1" mkr:usdt
   };;
-  okex) {
-    mkr_btc=$(setzer x-price "$1" mkr:btc)
-    btc_usd=$(setzer price btcusd)
-    setzer --format "$(bc -l <<<"$mkr_btc * $btc_usd")"
+  uniswap_v3) {
+    mkrweth=$(setzer x-price "$1" mkr:weth)
+    wethusd=$(setzer price ethusd)
+    setzer --format "$(bc -l <<<"$wethusd * $mkrweth")"
   };;
   *) {
     setzer --price-commands "-$1-" $pair "${sources[@]}"

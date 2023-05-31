@@ -1,17 +1,23 @@
 #!/usr/bin/env bash
 set -e
-pair=btcgsu
+pair=BTCGSU
 sources=(
 gsu
+gsu1
+gsu2
 )
 
 case $1 in
    gsu) {
     setzer x-price "$1" "BTC"
       };;
-
+    gsu1) {
+    setzer x-price "$1" "BTC"
+      };;
+    gsu2) {
+    setzer x-price "$1" "BTC"
+      };;
   *) {
-    export SETZER_MIN_MEDIAN=1
     setzer --price-commands "-$1-" $pair "${sources[@]}"
   };;
 esac

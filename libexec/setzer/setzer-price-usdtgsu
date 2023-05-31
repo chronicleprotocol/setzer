@@ -1,25 +1,23 @@
 #!/usr/bin/env bash
 set -e
-pair=wbtcgsu
+pair=USDTGSU
 sources=(
-gsu
-gsu1
-gsu2
+  gsu
+  gsu1
+  gsu2
 )
-
 case $1 in
-   gsu) {
-    setzer x-price "$1" "WBTC"
+  gsu) {
+    setzer x-price "$1" "USDT"
       };;
   gsu1) {
-    setzer x-price "$1" "WBTC"
+    setzer x-price "$1" "USDT"
       };;
   gsu2) {
-    setzer x-price "$1" "WBTC"
+    setzer x-price "$1" "USDT"
       };;
 
   *) {
-    export SETZER_MIN_MEDIAN=1
     setzer --price-commands "-$1-" $pair "${sources[@]}"
   };;
 esac
