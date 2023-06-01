@@ -2,8 +2,8 @@
 coreutils, curl, jshon, bc, gnused, perl, datamash, git }:
 
 stdenv.mkDerivation rec {
-  name = "setzer-mcd-${version}";
-  version = "0.7.0";
+  pname = "setzer";
+  version = "0.8.0";
   src = ./.;
 
   nativeBuildInputs = [makeWrapper];
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Ethereum price feed tool";
-    homepage = https://github.com/makerdao/setzer;
+    description = "Asset Price feed tool for on-chain oracles";
+    homepage = https://github.com/chronicleprotocol/setzer;
     license = licenses.gpl3;
     inherit version;
   };

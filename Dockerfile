@@ -1,7 +1,7 @@
 FROM alpine:3.14
 
 RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-  bash git datamash jq curl make jshon perl build-base ca-certificates
+  bash git datamash jq curl make jshon perl build-base ca-certificates htmlq
 
 # setting setzer configs
 ENV SETZER_CACHE_EXPIRY=-1 \
