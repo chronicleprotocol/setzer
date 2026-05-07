@@ -19,11 +19,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@bfdd3570ce990073878bf10f6b2d79082de49492
         with:
           go-version: ${{ matrix.go-version }}
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5
       - name: Start Smocker instance for testing
         run: docker run -d -p 8080:8080 -p 8081:8081 --name smocker thiht/smocker
       - name: Build E2E Tests in Docker
